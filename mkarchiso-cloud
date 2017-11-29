@@ -97,16 +97,9 @@ EOF
     function disable_udev_dhcpcd() {
         rm airootfs/etc/udev/rules.d/81-dhcpcd.rules
     }
-
-    function enable_systemd_networkd() {
-        mkdir -p airootfs/etc/systemd/network
-        cat "${BASE_DIR}/50-wired.network" > airootfs/etc/systemd/network/50-wired.network
-        ln -sf /run/systemd/resolve/resolv.conf airootfs/etc/resolv.conf
-        cat << EOF >> airootfs/root/customize_airootfs.sh
-systemctl enable \
-systemd-networkd.service \
-systemd-resolved.service
-EOF
+    
+    function disable_udev_predictable_network_interface_names() {
+        ln -s /dev/null airootfs/etc/udev/rules.d/80-net-setup-link.rules
     }
 
     BASE_DIR="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
@@ -119,7 +112,7 @@ EOF
         enable_serial_console_efiboot
         enable_timeout_syslinux
         disable_udev_dhcpcd
-        enable_systemd_networkd
+        disable_udev_predictable_network_interface_names
     )
     find "${CONFIG}" -type f -exec sha256sum {} \; > "${CONFIG_SHA256SUM}"
 }
