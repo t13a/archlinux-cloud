@@ -125,7 +125,7 @@ EOF
 }
 
 function build() {
-    "${CONFIG}/build.sh" -N archlinux-ci -v
+    "${CONFIG}/build.sh" -N archlinux-cloud -v
 }
 
 unset BUILD
