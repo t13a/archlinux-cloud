@@ -15,10 +15,13 @@ DOCKER_RUN = docker run \
 	-e APPLICATION=$(APPLICATION) \
 	-e INSTALL_DIR=$(INSTALL_DIR) \
 	-e WAIT_TIMEOUT_SECS=$(WAIT_TIMEOUT_SECS) \
+	-e TEST_TIMEOUT_SECS=$(TEST_TIMEOUT_SECS) \
 	-e PUID=$(shell id -u) \
 	-e PGID=$(shell id -g) \
 	--privileged \
 	--rm \
+	--tmpfs=/run/shm \
+	--tmpfs=/tmp:exec \
 	-v $(abspath $(2)):$(3) \
 	-v $(abspath $(WORK_DIR)):/work \
 	-v $(abspath $(OUT_DIR)):/out \

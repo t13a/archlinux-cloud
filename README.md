@@ -1,5 +1,7 @@
 # archiso-cloud
 
+[![Build Status](https://travis-ci.org/t13a/archiso-cloud.svg?branch=master)](https://travis-ci.org/t13a/archiso-cloud)
+
 An [Arch Linux](https://www.archlinux.org) cloud installation image builder.
 
 - Based on the official Arch Linux ISO profile (`releng`)
@@ -104,4 +106,6 @@ $ make ISO_VERSION=dev run-exec
 
 - [Archiso](https://wiki.archlinux.org/index.php/Archiso)
 - [cloud-init Documentation](https://cloudinit.readthedocs.io/)
+- [Docker Base Image for Arch Linux](https://github.com/archlinux/archlinux-docker)
+- [Install from existing Linux](https://wiki.archlinux.org/index.php/Install_from_existing_Linux)
 - [QEMU wiki](https://wiki.qemu.org)

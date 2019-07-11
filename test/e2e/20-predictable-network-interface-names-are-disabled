@@ -1,6 +1,6 @@
 #!/usr/bin/expect
 
-set timeout 10
+set timeout $env(TEST_TIMEOUT_SECS)
 
 spawn qemu-ssh ls -1 /sys/class/net
 
@@ -8,11 +8,11 @@ set ethernet_interface "eth0"
 
 expect {
   eof {
-    puts "Failed to get '$ethernet_interface'"
+    puts "Failed to get '$ethernet_interface' (eof)"
     exit 1
   }
   timeout {
-    puts "Failed to get '$ethernet_interface'"
+    puts "Failed to get '$ethernet_interface' (timeout)"
     exit 1
   }
   "$ethernet_interface"
