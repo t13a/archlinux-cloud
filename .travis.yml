@@ -3,8 +3,5 @@ language: generic
 services:
 - docker
 
-before_install:
-- ls -ls /dev /run
-
 script:
 - make ISO_VERSION=dev all test

@@ -104,4 +104,5 @@ $ make ISO_VERSION=dev run-exec
 
 - [Archiso](https://wiki.archlinux.org/index.php/Archiso)
 - [cloud-init Documentation](https://cloudinit.readthedocs.io/)
+- [Install from existing Linux](https://wiki.archlinux.org/index.php/Install_from_existing_Linux)
 - [QEMU wiki](https://wiki.qemu.org)
