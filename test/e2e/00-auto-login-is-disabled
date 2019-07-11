@@ -8,11 +8,11 @@ send "\n"
 
 expect {
   eof {
-    puts "Failed to get login prompt"
+    puts "Failed to get login prompt (eof)"
     exit 1
   }
   timeout {
-    puts "Failed to get login prompt"
+    puts "Failed to get login prompt (timeout)"
     exit 1
   }
   "$env(QEMU_NAME) login:"

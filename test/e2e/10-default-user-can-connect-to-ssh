@@ -8,11 +8,11 @@ spawn qemu-ssh echo $greeting
 
 expect {
   eof {
-    puts "Failed to get command prompt"
+    puts "Failed to get command prompt (eof)"
     exit 1
   }
   timeout {
-    puts "Failed to get command prompt"
+    puts "Failed to get command prompt (timeout)"
     exit 1
   }
   "$greeting"
