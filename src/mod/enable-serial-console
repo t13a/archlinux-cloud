@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -euxo pipefail
+
+# cat << EOF >> airootfs/root/customize_airootfs.sh
+#
+# sed -i 's/^\(GRUB_CMDLINE_LINUX_DEFAULT\)="\([^"]*\)"/GRUB_TERMINAL=serial\nGRUB_SERIAL_COMMAND="serial --speed=38400 --unit=0 --word=8 --parity=no --stop=1"\n\1="\2 console=tty0 console=ttyS0,38400n8"/g' /etc/default/grub
+#
+# grub-mkconfig -o /boot/grub/grub.cfg
+# EOF
+
+sed -i 's/options \(.*\)/options \1 console=ttyS0,38400/g' efiboot/loader/entries/archiso-x86_64-cd.conf
+sed -i 's/options \(.*\)/options \1 console=ttyS0,38400/g' efiboot/loader/entries/archiso-x86_64-usb.conf
+
+sed -i 's/\(APPEND\) \(.*\)/\1 \2 console=tty0 console=ttyS0,115200n8/g' syslinux/archiso_sys.cfg
+sed -i 's/\(APPEND\) \(.*\)/\1 \2 console=tty0 console=ttyS0,115200n8/g' syslinux/syslinux.cfg
+
+sed -i '1s/^/SERIAL 0 115200\n/' syslinux/syslinux.cfg

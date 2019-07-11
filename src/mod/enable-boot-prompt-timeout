@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -euxo pipefail
+
+sed -i '1s/^/TIMEOUT 40\n/g' syslinux/archiso_head.cfg

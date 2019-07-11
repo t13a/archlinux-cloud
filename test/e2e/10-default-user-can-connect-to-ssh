@@ -1,0 +1,21 @@
+#!/usr/bin/expect
+
+set timeout 10
+
+set greeting "Hello world!"
+
+spawn qemu-ssh echo $greeting
+
+expect {
+  eof {
+    puts "Failed to get command prompt"
+    exit 1
+  }
+  timeout {
+    puts "Failed to get command prompt"
+    exit 1
+  }
+  "$greeting"
+}
+
+puts "Passed"

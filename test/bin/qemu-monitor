@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -euo pipefail
+
+SOCAT_CMD_ARGS=(socat - "${QEMU_MONITOR_SOCKET}")
+
+if [ ${#@} -gt 0 ]
+then
+    echo "${@}" | sudo "${SOCAT_CMD_ARGS[@]}"
+else
+    exec sudo "${SOCAT_CMD_ARGS[@]}"
+fi

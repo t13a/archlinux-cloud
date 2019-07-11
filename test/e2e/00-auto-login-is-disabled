@@ -1,0 +1,21 @@
+#!/usr/bin/expect
+
+set timeout 10
+
+spawn qemu-serial
+
+send "\n"
+
+expect {
+  eof {
+    puts "Failed to get login prompt"
+    exit 1
+  }
+  timeout {
+    puts "Failed to get login prompt"
+    exit 1
+  }
+  "$env(QEMU_NAME) login:"
+}
+
+puts "Passed"

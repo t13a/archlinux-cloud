@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -euo pipefail
+
+if [ -e "${QEMU_PIDFILE}" ]
+then
+    QEMU_PID="$(sudo cat "${QEMU_PIDFILE}")"
+
+    if [ -e "/proc/${QEMU_PID}" ]
+    then
+        sudo kill -KILL "${QEMU_PID}"
+    fi
+fi
+
+sudo rm -rf "${QEMU_SERIAL_SOCKET}" "${QEMU_MONITOR_SOCKET}" "${QEMU_PIDFILE}"

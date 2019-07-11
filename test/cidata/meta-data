@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -euxo pipefail
+
+cat << EOF
+instance-id: ${QEMU_NAME}
+local-hostname: ${QEMU_NAME}
+EOF

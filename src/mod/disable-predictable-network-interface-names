@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -euxo pipefail
+
+ln -s /dev/null airootfs/etc/udev/rules.d/80-net-setup-link.rules

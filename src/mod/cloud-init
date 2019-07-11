@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -euxo pipefail
+
+cat << EOF >> packages.x86_64
+cloud-init
+python-cheetah3
+python-markdown
+EOF
+
+cat << EOF >> airootfs/root/customize_airootfs.sh
+
+# sed -i 's/^#\( - \[ \*log_base, \*log_syslog \]\)/\1/g' /etc/cloud/cloud.cfg.d/05_logging.cfg
+# sed -i 's/^\( - \[ \*log_base, \*log_file \]\)/# \1/g' /etc/cloud/cloud.cfg.d/05_logging.cfg
+# sed -i 's/^\(output: .*\)/# \1/g' /etc/cloud/cloud.cfg.d/05_logging.cfg
+
+systemctl enable \\
+    cloud-init-local.service \\
+    cloud-init.service \\
+    cloud-config.service \\
+    cloud-final.service
+EOF

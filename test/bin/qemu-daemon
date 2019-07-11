@@ -1,0 +1,128 @@
+#!/bin/bash
+
+set -euo pipefail
+
+function help() {
+    cat << EOF
+${0} [OPTION]... [QEMU_EXTRA_ARGS]...
+
+General options:
+  -f        run foreground
+  -h        print help
+  -K        disable KVM
+
+Wait options:
+  -t SECS   set wait timeout seconds (default: ${WAIT_TIMEOUT_SECS})
+  -w        wait for login prompt
+EOF
+}
+
+function run() {
+    local qemu_cmd_args=(
+        qemu-system-x86_64
+
+        # Standard options
+        -smp "${QEMU_SMP}"
+        -m "${QEMU_MEM}"
+        -name "${QEMU_NAME}"
+
+        # Block device options
+        -drive file="${ISO}",media=cdrom
+        -drive file="${CIDATA_ISO}",media=cdrom
+
+        # Display options
+        -nographic
+
+        # Network options
+        -nic "${QEMU_NIC}"
+
+        # Debug/Expert options
+        -serial "${QEMU_SERIAL}"
+        -monitor "${QEMU_MONITOR}"
+        -pidfile "${QEMU_PIDFILE}"
+        ${DAEMONIZE}
+        -nodefaults
+        -runas nobody
+    )
+
+    if [ -n "${ENABLE_KVM}" -a -c /dev/kvm ]
+    then
+        qemu_cmd_args+=(-cpu host -enable-kvm)
+    else
+        echo "${0}: KVM not enabled" >&2
+    fi
+
+    sudo "${qemu_cmd_args[@]}" "${@}"
+}
+
+function wait_login_prompt() {
+    expect << EOF
+set timeout ${WAIT_TIMEOUT_SECS}
+puts "Waiting for login prompt..."
+spawn qemu-serial
+expect {
+    timeout {
+        puts "Failed to wait for login prompt"
+        exit 1
+    }
+    "${QEMU_NAME} login:"
+}
+send_user "\n"
+EOF
+}
+
+TRAP_SIGNALS=(INT TERM)
+QEMU_SERIAL="${QEMU_SERIAL}"
+DAEMONIZE=-daemonize
+
+ENABLE_KVM=yes
+WAIT=
+WAIT_TIMEOUT_SECS="${WAIT_TIMEOUT_SECS}"
+
+while getopts 'fhKt:w' OPT
+do
+    case "${OPT}" in
+        f)
+            FOREGROUND=
+            TRAP_SIGNALS+=(EXIT)
+            QEMU_SERIAL=stdio
+            DAEMONIZE=
+            ;;
+        h)
+            help
+            exit
+            ;;
+        K)
+            ENABLE_KVM=
+            ;;
+        t)
+            WAIT_TIMEOUT_SECS="${OPTARG}"
+            ;;
+        w)
+            WAIT=yes
+            ;;
+        *)
+            exit 1
+            ;;
+    esac
+done
+
+shift $((${OPTIND} - 1))
+
+if [ -n "${WAIT}" -a -z "${DAEMONIZE}" ]
+then
+    echo "${0}: invalid options: -f and -w are exclusive" >&2
+    exit 1
+fi
+
+trap qemu-kill "${TRAP_SIGNALS[@]}"
+run "${@}"
+
+if [ -n "${WAIT}" ]
+then
+    if ! wait_login_prompt
+    then
+        qemu-kill
+        exit 1
+    fi
+fi
