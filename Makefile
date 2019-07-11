@@ -19,6 +19,8 @@ DOCKER_RUN = docker run \
 	-e PGID=$(shell id -g) \
 	--privileged \
 	--rm \
+	--tmpfs=/run/shm \
+	--tmpfs=/tmp:exec \
 	-v $(abspath $(2)):$(3) \
 	-v $(abspath $(WORK_DIR)):/work \
 	-v $(abspath $(OUT_DIR)):/out \
