@@ -15,6 +15,7 @@ DOCKER_RUN = docker run \
 	-e APPLICATION=$(APPLICATION) \
 	-e INSTALL_DIR=$(INSTALL_DIR) \
 	-e WAIT_TIMEOUT_SECS=$(WAIT_TIMEOUT_SECS) \
+	-e TEST_TIMEOUT_SECS=$(TEST_TIMEOUT_SECS) \
 	-e PUID=$(shell id -u) \
 	-e PGID=$(shell id -g) \
 	--privileged \

@@ -28,6 +28,7 @@ export QEMU_MONITOR := unix:${QEMU_MONITOR_SOCKET},server,nowait
 export QEMU_PIDFILE := /run/qemu@$(QEMU_NAME).pid
 
 export WAIT_TIMEOUT_SECS := $(or $(WAIT_TIMEOUT_SECS),1200)
+export TEST_TIMEOUT_SECS := $(or $(TEST_TIMEOUT_SECS),120)
 
 PRINT = @echo -e "\e[1;34m"[test] $(1)"\e[0m"
 
