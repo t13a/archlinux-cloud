@@ -1,0 +1,9 @@
+kind: pipeline
+name: default
+
+steps:
+- name: build
+  image: buildpack-deps
+  privileged: true
+  commands:
+  - make ISO_VERSION=dev all test
