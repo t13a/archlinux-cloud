@@ -5,11 +5,11 @@ set -euxo pipefail
 cat << EOF
 #cloud-config
 
-bootcmd:
 # Use systemd instead of netctl. This is also a workaround for the
 # problem that network-config does not work well in Arch Linux.
 #
 # @ref: https://bugs.launchpad.net/cloud-init/+bug/1714495
+bootcmd:
 - |
     cat << EOF > /etc/systemd/network/20-wired.network
     [Match]
@@ -18,9 +18,8 @@ bootcmd:
     [Network]
     DHCP=ipv4
     EOF
-
-    ln -fs /run/systemd/resolve/resolv.conf /etc/resolv.conf
-    systemctl start systemd-networkd systemd-resolved
+- ln -fs /run/systemd/resolve/resolv.conf /etc/resolv.conf
+- systemctl start systemd-networkd systemd-resolved
 
 ssh_authorized_keys:
 - "$(cat "${SSH_KEY_PUB}")"

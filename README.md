@@ -53,9 +53,8 @@ bootcmd:
     [Network]
     DHCP=ipv4
     EOF
-
-    ln -fs /run/systemd/resolve/resolv.conf /etc/resolv.conf
-    systemctl start systemd-networkd systemd-resolved
+- ln -fs /run/systemd/resolve/resolv.conf /etc/resolv.conf
+- systemctl start systemd-networkd systemd-resolved
 ...
 ```
 

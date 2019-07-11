@@ -22,10 +22,6 @@ sed -i 's/#\(HandleLidSwitch=\)suspend/\1ignore/' /etc/systemd/logind.conf
 systemctl enable pacman-init.service choose-mirror.service
 systemctl set-default multi-user.target
 
-# sed -i 's/^#\( - \[ \*log_base, \*log_syslog \]\)/\1/g' /etc/cloud/cloud.cfg.d/05_logging.cfg
-# sed -i 's/^\( - \[ \*log_base, \*log_file \]\)/# \1/g' /etc/cloud/cloud.cfg.d/05_logging.cfg
-# sed -i 's/^\(output: .*\)/# \1/g' /etc/cloud/cloud.cfg.d/05_logging.cfg
-
 systemctl enable \
     cloud-init-local.service \
     cloud-init.service \
