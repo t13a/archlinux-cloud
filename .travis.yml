@@ -4,4 +4,16 @@ services:
 - docker
 
 script:
-- make ISO_VERSION=dev build test
+- make ISO_VERSION=$(date +%Y.%m.%d) build test
+
+deploy:
+  provider: releases
+  api_key:
+    secure: bAY1lV6dfCKWAwreXCi68s0v6c9LThAgGbksbScTuTJO0f1hrhT6pGNOkG4IMKkaLHdjt3P11NKlutPHYZWpXa+buYv7d6KeWweUI8J441sML5qSXM4yZ2los6pdiRcH0ioKII0Yr1/dZM6a07I9MuWffiqv7dQgZv3YQ5vOc6wb98j5BVoHOyzJF479AK21sOgy4klKglQGQsH/RT6SVJDNx2D41z73sBVmSVJiqebPRHYlUa6dVwBISwcaArmJTkFFlyl7SWplqxJrSsI2dLrBS4Jg22GY0io2lOZI+0Txs61ovJs4zw9kz25qf+mpZMIhb0dqDYdhXoWA6iNv0PUqhMqYi7S2HWh37NX9soNtdkDejAwqRY2jKJVy/jtBPJvnvI/hIXVfKdK0mpJpRnJf0wU5uejPCnrChS/Id0bG8/HEteZWyclD7GFIAxBuPClQRJW9UBJ3p32wkhUd9WrVV993yFtWQ/djsGua0lQeQ8iPJUuUOJODCf1kye3rZqb2dBqXkrnd17ihe+G9WS1hJWkE1nnVySD9ySiVEdZd4iTlJjSPspCgUgYBluaSwa6HiqoGG996+wx159Ord0XAGTC+MoFVU154rkqxc8ASiQ6w0Mi6WN7V0qhQ6+rWVGrdAkduxnH3UDEGFDo/k2Dahvm+PlR/knMMvbovfh8=
+  file_glob: true
+  file: out/*
+  skip_cleanup: true
+  on:
+    branch: master
+    tags: on
+  overwrite: true
