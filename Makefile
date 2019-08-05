@@ -34,7 +34,10 @@ RUN = $(call DOCKER_RUN,runner,$(TEST_DIR),/test)
 PRINT = @echo -e "\e[1;34m"$(1)"\e[0m"
 
 .PHONY: all
-all: build-all
+all: build
+
+.PHONY: build
+build: build-all
 
 .PHONY: test
 test: run-all

@@ -26,7 +26,7 @@ The build process and E2E tests (using [QEMU](https://www.qemu.org/)) are run en
 The following command generates the ISO image at `out/archlinux-cloud-YYYY.mm.dd-x86_64.iso`.
 
 ```
-$ make all
+$ make build
 ```
 
 To delete all generated files and containers, run the following command.
@@ -65,7 +65,7 @@ bootcmd:
 It is good practice not to include the creation date in the `ISO_VERSION` variable to avoid unintended file name inconsistencies.
 
 ```
-$ make ISO_VERSION=dev all test
+$ make ISO_VERSION=dev build test
 ```
 
 ### Debugging
@@ -82,7 +82,6 @@ $ make ISO_VERSION=dev build-exec
 #### Run QEMU with the ISO image
 
 ```
-$ make all
 $ make ISO_VERSION=dev run-exec
 [runner@ffffffffffff test]$ make cidata # generate cloud-init data source ISO image
 [runner@ffffffffffff test]$ qemu-daemon # start QEMU in background
@@ -95,7 +94,6 @@ $ make ISO_VERSION=dev run-exec
 or
 
 ```
-$ make all
 $ make ISO_VERSION=dev run-exec
 [runner@ffffffffffff test]$ make cidata
 [runner@ffffffffffff test]$ qemu-daemon -f # start QEMU in foreground
