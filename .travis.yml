@@ -6,6 +6,9 @@ services:
 script:
 - make ISO_VERSION=$(date +%Y.%m.%d) build test
 
+before_deploy:
+- export TRAVIS_TAG="$(git tag --contains=HEAD --sort=taggerdate | tail -n 1)"
+
 deploy:
   provider: releases
   api_key:
