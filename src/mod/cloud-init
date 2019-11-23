@@ -4,8 +4,7 @@ set -euxo pipefail
 
 cat << EOF >> packages.x86_64
 cloud-init
-python-cheetah3
-python-markdown
+growpart
 EOF
 
 cat << EOF >> airootfs/root/customize_airootfs.sh
