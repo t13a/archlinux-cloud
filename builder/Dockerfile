@@ -1,4 +1,4 @@
-FROM archlinux/base
+FROM archlinux
 
 RUN pacman -Syu --noconfirm \
     && pacman -S --needed --noconfirm base-devel archiso git \
