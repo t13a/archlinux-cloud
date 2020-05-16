@@ -18,7 +18,7 @@ export SSH_KEY_PUB := $(SSH_KEY).pub
 export SSH_FORWARD_PORT := 2222
 
 export QEMU_SMP := 1
-export QEMU_MEM := 512
+export QEMU_MEM := 1024
 export QEMU_NAME := $(ISO_NAME)
 export QEMU_NIC := user,hostfwd=tcp::$(SSH_FORWARD_PORT)-:22
 export QEMU_SERIAL_SOCKET := /run/qemu-serial@$(QEMU_NAME).socket
