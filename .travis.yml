@@ -17,6 +17,5 @@ deploy:
   file: out/*
   skip_cleanup: true
   on:
-    branch: master
-    tags: on
+    tags: true
   overwrite: true
