@@ -17,5 +17,6 @@ deploy:
   file: out/*
   skip_cleanup: true
   on:
+    all_branches: true
     condition: -n "$(git tag --points-at=HEAD)"
   overwrite: true
