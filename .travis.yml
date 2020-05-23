@@ -6,9 +6,6 @@ services:
 script:
 - make ISO_VERSION=$(date +%Y.%m.%d) build test
 
-before_deploy:
-- export TRAVIS_TAG="$(git tag --points-at=HEAD | sed '/-/!{s/$/_/}' | sort -V | sed 's/_$//' | tail -n 1)"
-
 deploy:
   provider: releases
   api_key:
@@ -17,6 +14,5 @@ deploy:
   file: out/*
   skip_cleanup: true
   on:
-    all_branches: true
-    condition: -n "$(git tag --points-at=HEAD)"
+    tags: true
   overwrite: true
