@@ -7,7 +7,7 @@ script:
 - make ISO_VERSION=$(date +%Y.%m.%d) build test
 
 before_deploy:
-- export TRAVIS_TAG="$(git tag --contains=HEAD --sort=taggerdate | tail -n 1)"
+- export TRAVIS_TAG="$(git tag --points-at=HEAD | sed '/-/!{s/$/_/}' | sort -V | sed 's/_$//' | tail -n 1)"
 
 deploy:
   provider: releases
@@ -17,5 +17,5 @@ deploy:
   file: out/*
   skip_cleanup: true
   on:
-    tags: true
+    condition: -n "$(git tag --points-at=HEAD)"
   overwrite: true
