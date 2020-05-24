@@ -5,11 +5,11 @@
 An [Arch Linux](https://www.archlinux.org) cloud installation image builder.
 
 - Based on the official Arch Linux ISO profile (`releng`)
-- [cloud-init](https://cloud-init.io) is enabled
-- [Predictable network interface names](https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/) are disabled
-- Serial console is enabled
-- Auto login is disabled
-- Root password is locked
+- [cloud-init](https://cloud-init.io) installed
+- [Predictable network interface names](https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/) disabled
+- Serial console enabled
+- Auto login disabled
+- Root password locked
 
 The build process and E2E tests (using [QEMU](https://www.qemu.org/)) are run entirely on the Docker container. Therefore, it can be easily integrated with modern CI tools.
 
