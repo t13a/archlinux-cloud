@@ -1,6 +1,6 @@
-# archiso-cloud
+# archlinux-cloud
 
-[![Build Status](https://travis-ci.org/t13a/archiso-cloud.svg?branch=master)](https://travis-ci.org/t13a/archiso-cloud)
+[![Build Status](https://travis-ci.org/t13a/archlinux-cloud.svg?branch=master)](https://travis-ci.org/t13a/archlinux-cloud)
 
 An [Arch Linux](https://www.archlinux.org) cloud installation image builder.
 
