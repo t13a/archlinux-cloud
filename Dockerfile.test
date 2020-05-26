@@ -1,0 +1,20 @@
+FROM archlinux
+
+RUN pacman -Syu --noconfirm \
+    && pacman -S --needed --noconfirm \
+        cdrtools \
+        expect \
+        iproute2 \
+        make \
+        net-tools \
+        openssh \
+        procps-ng \
+        qemu-headless \
+        socat \
+        sudo \
+    && pacman -Scc --noconfirm
+
+COPY entrypoint.sh /
+
+ENTRYPOINT ["/entrypoint.sh"]
+

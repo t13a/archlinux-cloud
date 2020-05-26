@@ -1,6 +1,6 @@
 #!/usr/bin/expect
 
-set timeout $env(TEST_TIMEOUT_SECS)
+set timeout $env(CASE_TIMEOUT_SECS)
 
 spawn qemu-ssh ls -1 /sys/class/net
 

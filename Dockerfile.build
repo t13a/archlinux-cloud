@@ -1,0 +1,13 @@
+FROM archlinux
+
+RUN pacman -Syu --noconfirm \
+    && pacman -S --needed --noconfirm \
+        base-devel \
+        archiso \
+        git \
+    && pacman -Scc --noconfirm
+
+COPY entrypoint.sh /
+
+ENTRYPOINT ["/entrypoint.sh"]
+

@@ -1,71 +1,78 @@
-OUT_DIR := out
-SRC_DIR := src
-TEST_DIR := test
-WORK_DIR := work
-
-ISO_NAME := archlinux-cloud
-ISO_VERSION := $(shell date +%Y.%m.%d)
-
-DOCKER_TAG = archiso-cloud-$(1)
-DOCKER_RUN = docker run \
-	-e ISO_NAME=$(ISO_NAME) \
-	-e ISO_VERSION=$(ISO_VERSION) \
-	-e ISO_LABEL=$(ISO_LABEL) \
-	-e PUBLISHER=$(PUBLISHER) \
-	-e APPLICATION=$(APPLICATION) \
-	-e INSTALL_DIR=$(INSTALL_DIR) \
-	-e WAIT_TIMEOUT_SECS=$(WAIT_TIMEOUT_SECS) \
-	-e TEST_TIMEOUT_SECS=$(TEST_TIMEOUT_SECS) \
-	-e PUID=$(shell id -u) \
-	-e PGID=$(shell id -g) \
-	--privileged \
-	--rm \
-	--tmpfs=/run/shm \
-	--tmpfs=/tmp:exec \
-	-v $(abspath $(2)):$(3) \
-	-v $(abspath $(WORK_DIR)):/work \
-	-v $(abspath $(OUT_DIR)):/out \
-	$(DOCKER_RUN_EXTRA_OPTS) \
-	$(call DOCKER_TAG,$(1))
-
-BUILD = $(call DOCKER_RUN,builder,$(SRC_DIR),/src)
-RUN = $(call DOCKER_RUN,runner,$(TEST_DIR),/test)
-
 PRINT = @echo -e "\e[1;34m"$(1)"\e[0m"
 
+BUILD_DIR := build
+TEST_DIR := test
+OUT_DIR := out
+
+export CONTAINER_BUILD_DIR := /build
+export CONTAINER_TEST_DIR := /test
+export CONTAINER_OUT_DIR := /out
+export CONTAINER_DOTENV := /.env
+export CONTAINER_DOTENV_SCRIPT := /dotenv.sh
+
+CONTAINER_RUN = docker run \
+	-e BUILD_DIR=$(CONTAINER_BUILD_DIR) \
+	-e TEST_DIR=$(CONTAINER_TEST_DIR) \
+	-e OUT_DIR=$(CONTAINER_OUT_DIR) \
+	-e DOTENV=$(CONTAINER_DOTENV) \
+	-e DOTENV_SCRIPT=$(CONTAINER_DOTENV_SCRIPT) \
+	-e PUID=$(shell id -u) \
+	-e PGID=$(shell id -g) \
+	-e PUSER=$(1) \
+	-i \
+	--privileged \
+	--rm \
+	-t \
+	--tmpfs=/run/shm \
+	--tmpfs=/tmp:exec \
+	-v "$(abspath $(DOTENV)):$(CONTAINER_DOTENV)" \
+	-v "$(abspath $(DOTENV_SCRIPT)):$(CONTAINER_DOTENV_SCRIPT)" \
+	-v "$(abspath $(2)):$(3)" \
+	-v "$(abspath $(OUT_DIR)):$(CONTAINER_OUT_DIR)" \
+	-w "$(3)" \
+	$(call CONTAINER_IMAGE,$(1)) \
+	$(CONTAINER_DOTENV_SCRIPT)
+
+INIT_FILES :=
+CLEAN_FILES := $(OUT_DIR)
+
+include *.mk
+
+.DEFAULT_GOAL := all
 .PHONY: all
-all: build
+all: init build test
+
+.PHON: init
+init: $(INIT_FILES)
 
 .PHONY: build
-build: build-all
+build: build/all
+
+.PHONY: build/%
+build/%: build-container $(OUT_DIR)
+	$(call PRINT,Starting build container...)
+	$(call CONTAINER_RUN,build,$(BUILD_DIR),$(CONTAINER_BUILD_DIR)) make $(MAKEFLAGS) $*
+	$(call PRINT,Stopped build container)
 
 .PHONY: test
-test: run-all
+test: test/all
 
-.PHONY: build-%
-build-exec: DOCKER_RUN_EXTRA_OPTS = -it
-build-%: builder $(OUT_DIR) $(WORK_DIR)
-	$(call PRINT,Starting builder...)
-	$(BUILD) make $(@:build-%=%)
-	$(call PRINT,Stopped builder)
+.PHONY: test/%
+test/%: test-container $(OUT_DIR)
+	$(call PRINT,Starting test container...)
+	$(call CONTAINER_RUN,test,$(TEST_DIR),$(CONTAINER_TEST_DIR)) make $(MAKEFLAGS) $*
+	$(call PRINT,Stopped test container)
 
-.PHONY: run-%
-run-exec: DOCKER_RUN_EXTRA_OPTS = -it
-run-%: runner $(OUT_DIR) $(WORK_DIR)
-	$(call PRINT,Starting runner...)
-	$(RUN) make $(@:run-%=%)
-	$(call PRINT,Stopped runner)
-
-.PHONY: builder runner
-builder runner:
-	$(call PRINT,Building Docker image $(call DOCKER_TAG,$@)...)
-	docker build -t $(call DOCKER_TAG,$@) $@
-
-$(OUT_DIR) $(WORK_DIR):
-	$(call PRINT,Creating host directory $(@)...)
-	mkdir -p $@
+$(OUT_DIR):
+	$(call PRINT,'Creating directory "$@"...')
+	mkdir -p $(@)
 
 .PHONY: clean
 clean:
-	rm -rf $(OUT_DIR) $(WORK_DIR)
-	docker rmi -f $(call DOCKER_TAG,builder) $(call DOCKER_TAG,runner)
+	$(call PRINT,Cleaning...)
+	docker run \
+		--rm \
+		-v "$(abspath .):/work" \
+		-w /work \
+		archlinux \
+		rm -rf $(CLEAN_FILES)

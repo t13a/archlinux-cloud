@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -euo pipefail
+
+SSH_CMD_ARGS=(
+    ssh
+    -i "${OUT_SSH_KEY}"
+    -o StrictHostKeyChecking=off
+    -p "${SSH_FORWARD_PORT}"
+    ${SSH_EXTRA_OPTS:-}
+    arch@localhost
+)
+
+exec "${SSH_CMD_ARGS[@]}" "${@}"

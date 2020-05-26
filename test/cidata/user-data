@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -euxo pipefail
 
@@ -22,5 +22,5 @@ bootcmd:
 - systemctl start systemd-networkd systemd-resolved
 
 ssh_authorized_keys:
-- "$(cat "${SSH_KEY_PUB}")"
+- "$(cat "${OUT_SSH_KEY_PUB}")"
 EOF

@@ -2,12 +2,12 @@
 
 [![Build Status](https://travis-ci.org/t13a/archlinux-cloud.svg?branch=master)](https://travis-ci.org/t13a/archlinux-cloud)
 
-An [Arch Linux](https://www.archlinux.org) cloud installation image builder.
+An [Arch Linux](https://www.archlinux.org) cloud installation image.
 
 - Based on the official Arch Linux ISO profile (`releng`)
 - [cloud-init](https://cloud-init.io) installed
-- [Predictable network interface names](https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/) disabled
 - Serial console enabled
+- [Predictable network interface names](https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/) disabled
 - Auto login disabled
 - Root password locked
 
@@ -17,21 +17,21 @@ The build process and E2E tests (using [QEMU](https://www.qemu.org/)) are run en
 
 - Docker
 - GNU Make
-- KVM enabled Linux (for development, optional but strongly recommended)
+- KVM enabled Linux (optional but strongly recommended)
 
 ## Getting started
 
-### Build the ISO image
+### Build and test the ISO image
 
-The following command generates the ISO image at `out/archlinux-cloud-YYYY.mm.dd-x86_64.iso`.
+The following command generates the ISO image at `out/iso/archlinux-cloud-YYYY.mm.dd-x86_64.iso` then run all E2E tests.
 
+```sh
+$ make init build test # or just simply `make`
 ```
-$ make build
-```
 
-To delete all generated files and containers, run the following command.
+To delete all generated files, run the following command.
 
-```
+```sh
 $ make clean
 ```
 
@@ -41,7 +41,7 @@ Please refer to the [official documentation](https://cloudinit.readthedocs.io/) 
 
 In Arch Linux, cloud-init 19.1 tries network configuration with [netctl](https://wiki.archlinux.org/index.php/Netctl). However, this does not work well because it has a [bug](https://bugs.launchpad.net/cloud-init/+bug/1714495). As a workaround, the following example shows how to use [systemd-networkd](https://wiki.archlinux.org/index.php/Systemd-networkd) and [systemd-resolved](https://wiki.archlinux.org/index.php/Systemd-resolved) with [`bootcmd` module](https://cloudinit.readthedocs.io/en/latest/topics/modules.html#bootcmd) instead of using normal network configuration.
 
-```
+```yaml
 #cloud-config
 ...
 bootcmd:
@@ -60,43 +60,35 @@ bootcmd:
 
 ## Development
 
-### E2E test
+### Build the ISO image step-by-step
 
-It is good practice not to include the creation date in the `ISO_VERSION` variable to avoid unintended file name inconsistencies.
-
-```
-$ make ISO_VERSION=dev build test
-```
-
-### Debugging
-
-#### Build the ISO image step-by-step
-
-```
-$ make ISO_VERSION=dev build-exec
-[builder@ffffffffffff src]$ make archlive # build profile
-[builder@ffffffffffff src]$ make repo # build custom repository
-[builder@ffffffffffff src]$ make iso # build ISO image
+```sh
+$ make init
+$ make build/exec
+[build@xxxxxxxxxxxx build]$ make profile
+[build@xxxxxxxxxxxx build]$ make repo
+[build@xxxxxxxxxxxx build]$ make iso
+[build@xxxxxxxxxxxx build]$ exit
 ```
 
-#### Run QEMU with the ISO image
+### Run QEMU with the ISO image
 
-```
-$ make ISO_VERSION=dev run-exec
-[runner@ffffffffffff test]$ make cidata # generate cloud-init data source ISO image
-[runner@ffffffffffff test]$ qemu-daemon # start QEMU in background
-[runner@ffffffffffff test]$ qemu-serial # connect to serial
-[runner@ffffffffffff test]$ qemu-monitor # connect to monitor
-[runner@ffffffffffff test]$ qemu-ssh # connect to SSH
-[runner@ffffffffffff test]$ qemu-kill # stop QEMU
+```sh
+$ make test/exec
+[test@xxxxxxxxxxxx test]$ make ssh-key
+[test@xxxxxxxxxxxx test]$ make cidata
+[test@xxxxxxxxxxxx test]$ qemu-daemon
+[test@xxxxxxxxxxxx test]$ qemu-serial
+[test@xxxxxxxxxxxx test]$ qemu-kill
 ```
 
 or
 
-```
-$ make ISO_VERSION=dev run-exec
-[runner@ffffffffffff test]$ make cidata
-[runner@ffffffffffff test]$ qemu-daemon -f # start QEMU in foreground
+```sh
+$ make test/exec
+[test@xxxxxxxxxxxx test]$ make ssh-key
+[test@xxxxxxxxxxxx test]$ make cidata
+[test@xxxxxxxxxxxx test]$ qemu-daemon -f # start in foreground
 ```
 
 ## References

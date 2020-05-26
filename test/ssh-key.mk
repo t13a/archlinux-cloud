@@ -1,19 +1,17 @@
-SSH_KEY_DONE := $(SSH_KEY_DIR)/ssh-key.done
+export OUT_SSH_KEY := $(OUT_DIR)/ssh-key/id_rsa
+export OUT_SSH_KEY_PUB := $(OUT_SSH_KEY).pub
+
+CLEAN_FILES += \
+	$(OUT_SSH_KEY) \
+	$(OUT_SSH_KEY_PUB)
 
 .PHONY: ssh-key
-ssh-key: $(SSH_KEY) $(SSH_KEY_PUB)
+ssh-key: $(OUT_SSH_KEY) $(OUT_SSH_KEY_PUB)
 
-$(SSH_KEY) $(SSH_KEY_PUB): $(SSH_KEY_DONE)
-
-$(SSH_KEY_DONE):
+$(OUT_SSH_KEY) $(OUT_SSH_KEY_PUB):
 	$(call PRINT,Generating SSH keys...)
-	rm -rf $(SSH_KEY_DIR)
-	mkdir -p $(SSH_KEY_DIR)
-	ssh-keygen -f $(SSH_KEY) -N ""
-	touch $(SSH_KEY_DONE)
+	rm -rf $(@D)
+	mkdir -p $(@D)
+	ssh-keygen -f $(OUT_SSH_KEY) -N ""
 	$(call PRINT,Successfully generated SSH keys)
 
-CLEAN_TARGETS += ssh-clean
-.PHONY: ssh-clean
-ssh-clean:
-	rm -rf $(SSH_KEY_DIR)
