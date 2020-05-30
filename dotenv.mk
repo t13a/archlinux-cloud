@@ -10,6 +10,6 @@ dotenv: $(DOTENV)
 
 $(DOTENV): $(DOTENV_TEMPLATE)
 	$(call PRINT,'Generating file "$@"...')
-	$(DOTENV_SCRIPT) -t < $< > $@.tmp
+	$(DOTENV_SCRIPT) < $< > $@.tmp
 	mv -f $@.tmp $@
 

@@ -7,31 +7,25 @@ OUT_DIR := out
 export CONTAINER_BUILD_DIR := /build
 export CONTAINER_TEST_DIR := /test
 export CONTAINER_OUT_DIR := /out
-export CONTAINER_DOTENV := /.env
-export CONTAINER_DOTENV_SCRIPT := /dotenv.sh
 
 CONTAINER_RUN = docker run \
 	-e BUILD_DIR=$(CONTAINER_BUILD_DIR) \
 	-e TEST_DIR=$(CONTAINER_TEST_DIR) \
 	-e OUT_DIR=$(CONTAINER_OUT_DIR) \
-	-e DOTENV=$(CONTAINER_DOTENV) \
-	-e DOTENV_SCRIPT=$(CONTAINER_DOTENV_SCRIPT) \
 	-e PUID=$(shell id -u) \
 	-e PGID=$(shell id -g) \
 	-e PUSER=$(1) \
+	--env-file=$(abspath $(DOTENV)) \
 	-i \
 	--privileged \
 	--rm \
 	-t \
 	--tmpfs=/run/shm \
 	--tmpfs=/tmp:exec \
-	-v "$(abspath $(DOTENV)):$(CONTAINER_DOTENV)" \
-	-v "$(abspath $(DOTENV_SCRIPT)):$(CONTAINER_DOTENV_SCRIPT)" \
 	-v "$(abspath $(2)):$(3)" \
 	-v "$(abspath $(OUT_DIR)):$(CONTAINER_OUT_DIR)" \
 	-w "$(3)" \
-	$(call CONTAINER_IMAGE,$(1)) \
-	$(CONTAINER_DOTENV_SCRIPT)
+	$(call CONTAINER_IMAGE,$(1))
 
 INIT_FILES :=
 CLEAN_FILES := $(OUT_DIR)
