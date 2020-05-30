@@ -4,9 +4,9 @@ BUILD_DIR := build
 TEST_DIR := test
 OUT_DIR := out
 
-export CONTAINER_BUILD_DIR := /build
-export CONTAINER_TEST_DIR := /test
-export CONTAINER_OUT_DIR := /out
+export CONTAINER_BUILD_DIR := /mnt/build
+export CONTAINER_TEST_DIR := /mnt/test
+export CONTAINER_OUT_DIR := /mnt/out
 
 CONTAINER_RUN = docker run \
 	-e BUILD_DIR=$(CONTAINER_BUILD_DIR) \
@@ -66,7 +66,7 @@ clean:
 	$(call PRINT,Cleaning...)
 	docker run \
 		--rm \
-		-v "$(abspath .):/work" \
-		-w /work \
+		-v "$(abspath .):/mnt" \
+		-w /mnt \
 		archlinux \
 		rm -rf $(CLEAN_FILES)
