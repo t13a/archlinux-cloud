@@ -5,11 +5,9 @@ services:
 
 script:
 - make
-- 'echo TRAVIS_BRANCH="${TRAVIS_BRANCH}"'
-- 'echo TRAVIS_TAG="${TRAVIS_TAG}"'
 
 before_deploy:
-- 'export "TRAVIS_TAG=${TRAVIS_TAG:-${TRAVIS_BRANCH}}"'
+- export TRAVIS_TAG=$TRAVIS_BRANCH
 
 deploy:
   provider: releases
@@ -20,5 +18,5 @@ deploy:
   skip_cleanup: true
   on:
     all_branches: true
-    condition: '"${TRAVIS_TAG:-${TRAVIS_BRANCH}}" =~ ^v[0-9]'
+    condition: $(git tag --points-at=HEAD $TRAVIS_BRANCH | wc -l) -eq 1 
   overwrite: true
