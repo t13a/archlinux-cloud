@@ -11,31 +11,17 @@ An [Arch Linux](https://www.archlinux.org) cloud installation image.
 - Auto login disabled
 - Root password locked
 
-The build process and E2E tests (using [QEMU](https://www.qemu.org/)) are run entirely on the Docker container. Therefore, it can be easily integrated with modern CI tools.
+## Get the latest release
 
-## Prerequisites
+You can download the latest and past releases from [GitHub releases](https://github.com/t13a/archlinux-cloud/releases).
 
-- Docker
-- GNU Make
-- KVM enabled Linux (optional but strongly recommended)
-
-## Getting started
-
-### Build and test the ISO image
-
-The following command generates the ISO image at `out/iso/archlinux-cloud-YYYY.mm.dd-x86_64.iso` then run all E2E tests.
+Alternatively, if you have `bash`, `curl` and `jq` installed on your computer, you can get the latest release with the following command.
 
 ```sh
-$ make init build test # or just simply `make`
+$ curl -fsSL https://raw.githubusercontent.com/t13a/archlinux-cloud/master/get-archlinux-cloud.sh | sh
 ```
 
-To delete all generated files, run the following command.
-
-```sh
-$ make clean
-```
-
-### Boot with cloud-init
+## Boot with cloud-init
 
 Please refer to the [official documentation](https://cloudinit.readthedocs.io/) for a general explanation.
 
@@ -60,35 +46,27 @@ bootcmd:
 
 ## Development
 
-### Build the ISO image step-by-step
+The build process and E2E tests (using [QEMU](https://www.qemu.org/)) are run entirely on the Docker container. Therefore, it can be easily integrated with modern CI tools.
+
+### Prerequisites
+
+- Bash
+- Docker
+- GNU Make
+- KVM enabled Linux (optional but strongly recommended)
+
+### Build and test the ISO image
+
+The following command generates the ISO image at `out/archlinux-cloud-YYYY.mm.dd-x86_64.iso` then run all E2E tests.
 
 ```sh
-$ make init
-$ make build/exec
-[build@xxxxxxxxxxxx build]$ make profile
-[build@xxxxxxxxxxxx build]$ make repo
-[build@xxxxxxxxxxxx build]$ make iso
-[build@xxxxxxxxxxxx build]$ exit
+$ make init build test # or just simply `make`
 ```
 
-### Run QEMU with the ISO image
+To delete all generated files, run the following command.
 
 ```sh
-$ make test/exec
-[test@xxxxxxxxxxxx test]$ make ssh-key
-[test@xxxxxxxxxxxx test]$ make cidata
-[test@xxxxxxxxxxxx test]$ qemu-daemon
-[test@xxxxxxxxxxxx test]$ qemu-serial
-[test@xxxxxxxxxxxx test]$ qemu-kill
-```
-
-or
-
-```sh
-$ make test/exec
-[test@xxxxxxxxxxxx test]$ make ssh-key
-[test@xxxxxxxxxxxx test]$ make cidata
-[test@xxxxxxxxxxxx test]$ qemu-daemon -f # start in foreground
+$ make clean
 ```
 
 ## References
