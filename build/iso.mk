@@ -1,4 +1,4 @@
-export OUT_ISO_WORK_DIR := $(OUT_DIR)/iso
+export OUT_ISO_WORK_DIR := $(OUT_DIR)/iso.work
 export OUT_ISO := $(OUT_ISO_DIR)/$(ISO_NAME)-$(ISO_VERSION)-x86_64.iso
 
 CLEAN_FILES += \

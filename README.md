@@ -32,15 +32,13 @@ In Arch Linux, cloud-init 19.1 tries network configuration with [netctl](https:/
 ...
 bootcmd:
 - |
-    cat << EOF > /etc/systemd/network/20-wired.network
+    cat << EOF > /etc/systemd/network/ethernet.network
     [Match]
     Name=eth0
 
     [Network]
     DHCP=ipv4
     EOF
-- ln -fs /run/systemd/resolve/resolv.conf /etc/resolv.conf
-- systemctl start systemd-networkd systemd-resolved
 ...
 ```
 

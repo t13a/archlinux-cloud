@@ -1,5 +1,0 @@
-#!/bin/bash
-
-set -euxo pipefail
-
-rm airootfs/etc/udev/rules.d/81-dhcpcd.rules

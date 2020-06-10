@@ -2,4 +2,7 @@
 
 set -euxo pipefail
 
-ln -s /dev/null airootfs/etc/udev/rules.d/80-net-setup-link.rules
+LINK_NAME=airootfs/etc/udev/rules.d/80-net-setup-link.rules
+
+mkdir -p "$(dirname "${LINK_NAME}")"
+ln -s /dev/null "${LINK_NAME}"

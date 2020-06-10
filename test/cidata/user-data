@@ -11,15 +11,13 @@ cat << EOF
 # @ref: https://bugs.launchpad.net/cloud-init/+bug/1714495
 bootcmd:
 - |
-    cat << EOF > /etc/systemd/network/20-wired.network
+    cat << EOF > /etc/systemd/network/ethernet.network
     [Match]
     Name=eth0
 
     [Network]
     DHCP=ipv4
     EOF
-- ln -fs /run/systemd/resolve/resolv.conf /etc/resolv.conf
-- systemctl start systemd-networkd systemd-resolved
 
 ssh_authorized_keys:
 - "$(cat "${OUT_SSH_KEY_PUB}")"
