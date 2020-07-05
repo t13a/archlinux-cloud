@@ -37,7 +37,7 @@ bootcmd:
     Name=eth0
 
     [Network]
-    DHCP=ipv4
+    DHCP=yes
     EOF
 ...
 ```
