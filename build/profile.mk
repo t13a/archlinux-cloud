@@ -32,7 +32,7 @@ $(OUT_PROFILE_DIR)/.src.done: profile/verify $(PROFILE_MODS)
 
 .PHONY: profile/verify
 profile/verify: $(PROFILE_CHECKSUM)
-	$(PROFILE_CHECKSUM_CMD) | diff $< -
+	$(PROFILE_CHECKSUM_CMD) | diff $< - || $(PROFILE_CHECKSUM_CMD) > $<.new
 
 $(PROFILE_CHECKSUM):
 	mkdir -p $(@D)
