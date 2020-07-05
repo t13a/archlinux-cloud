@@ -2,5 +2,4 @@
 
 set -euxo pipefail
 
-rm airootfs/etc/systemd/network/ethernet.network
-rm airootfs/etc/systemd/network/wireless.network
+rm airootfs/etc/systemd/network/*.network
