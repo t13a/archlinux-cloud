@@ -4,7 +4,7 @@ services:
 - docker
 
 script:
-- make
+- make all test
 
 before_deploy:
 - export TRAVIS_TAG=$TRAVIS_BRANCH

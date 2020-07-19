@@ -58,7 +58,7 @@ The build process and E2E tests (using [QEMU](https://www.qemu.org/)) are run en
 The following command generates the ISO image at `out/archlinux-cloud-YYYY.mm.dd-x86_64.iso` then run all E2E tests.
 
 ```sh
-$ make init build test # or just simply `make`
+$ make all test
 ```
 
 To delete all generated files, run the following command.

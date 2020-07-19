@@ -34,7 +34,7 @@ include *.mk
 
 .DEFAULT_GOAL := all
 .PHONY: all
-all: init build test
+all: init build
 
 .PHON: init
 init: $(INIT_FILES)
