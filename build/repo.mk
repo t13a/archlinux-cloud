@@ -13,11 +13,11 @@ $(OUT_REPO_DIR)/.done: $(foreach _,$(REPO_PKGS),$(OUT_REPO_DIR)/$_/.done)
 		$(OUT_REPO_DIR)/$(REPO_NAME).db.* \
 		$(OUT_REPO_DIR)/$(REPO_NAME).files \
 		$(OUT_REPO_DIR)/$(REPO_NAME).files.* \
-		$(OUT_REPO_DIR)/*.pkg.tar.gz
+		$(OUT_REPO_DIR)/*.pkg.tar.*
 	for REPO_PKG in $(REPO_PKGS); do \
-		cp $(OUT_REPO_DIR)/$${REPO_PKG}/*.pkg.tar.xz $(OUT_REPO_DIR); \
+		cp $(OUT_REPO_DIR)/$${REPO_PKG}/*.pkg.tar.* $(OUT_REPO_DIR); \
 	done
-	repo-add $(OUT_REPO_DIR)/$(REPO_NAME).db.tar.gz $(OUT_REPO_DIR)/*.pkg.tar.xz
+	repo-add $(OUT_REPO_DIR)/$(REPO_NAME).db.tar.gz $(OUT_REPO_DIR)/*.pkg.tar.*
 	touch $@
 	$(call PRINT,Succeessfully built custom repository)
 
