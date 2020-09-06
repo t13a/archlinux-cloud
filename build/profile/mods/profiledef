@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -euxo pipefail
+
+[ -f profiledef.sh ] || exit 1
+
+cat << EOF >> profiledef.sh
+
+# modified by archlinux-cloud
+iso_name="${ISO_NAME}"
+iso_label="${ISO_LABEL}"
+iso_publisher="Tatsuya Kitagawa <https://github.com/t13a/archlinux-cloud>"
+iso_application="Arch Linux Cloud Installation Image"
+iso_version="${ISO_VERSION}"
+EOF
