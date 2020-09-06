@@ -1,11 +1,12 @@
-PROFILE_CHECKSUM_CMD := cd $(PROFILE_SRC_DIR) && find . -type f | sort | xargs sha256sum
-PROFILE_MODS := $(shell find $(PROFILE_MOD_DIR) -type f -executable | sort)
+RELENG_DIR := /usr/share/archiso/configs/releng
 
-export OUT_PROFILE_DIR := $(OUT_DIR)/profile
+PROFILE_CHECKSUM := $(BUILD_DIR)/profile/checksum
+PROFILE_CHECKSUM_CMD := cd $(RELENG_DIR) && find . -type f | sort | xargs sha256sum
 
+PROFILE_MODS := $(shell find $(BUILD_DIR)/profile/mods -type f -executable | sort)
+
+OUT_PROFILE_DIR := $(OUT_DIR)/profile
 OUT_PROFILE_MOD_DONE = $(OUT_PROFILE_DIR)/.mod-$(shell basename $(1)).done
-
-CLEAN_FILES += $(OUT_PROFILE_DIR)
 
 .PHONY: profile
 profile: $(OUT_PROFILE_DIR)/.done
@@ -26,16 +27,15 @@ $(eval $(foreach _,$(PROFILE_MODS),$(call PROFILE_MOD_DONE_RULE,$_)))
 $(OUT_PROFILE_DIR)/.src.done: profile/verify $(PROFILE_MODS)
 	$(call PRINT,Copying source profile...)
 	rm -rf $(@D)
-	cp -r $(PROFILE_SRC_DIR) $(@D)
+	cp -r $(RELENG_DIR) $(@D)
 	mkdir -p $(@D)
 	touch $@
 
 .PHONY: profile/verify
 profile/verify: $(PROFILE_CHECKSUM)
-	$(PROFILE_CHECKSUM_CMD) | diff $< - || $(PROFILE_CHECKSUM_CMD) > $<.new
+	$(call PRINT,Verifying source profile...)
+	$(PROFILE_CHECKSUM_CMD) | diff $< - || sudo sh -c '$(PROFILE_CHECKSUM_CMD) > $<.new'
 
 $(PROFILE_CHECKSUM):
-	mkdir -p $(@D)
-	$(PROFILE_CHECKSUM_CMD) > $@.tmp
-	mv -f $@.tmp $@
-
+	$(call PRINT,Creating checksum of source profile...)
+	sudo sh -c '$(PROFILE_CHECKSUM_CMD) > $@'

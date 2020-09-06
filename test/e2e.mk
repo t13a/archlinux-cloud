@@ -1,4 +1,4 @@
-E2E_CASES := $(shell find $(E2E_CASE_DIR) -type f -executable | sort)
+E2E_CASES := $(shell find $(TEST_DIR)/e2e -type f -executable | sort)
 E2E_CASE_TARGET = e2e/case/$(notdir $(1))
 E2E_CASE_TARGETS := $(foreach _,$(E2E_CASES),$(call E2E_CASE_TARGET,$_))
 

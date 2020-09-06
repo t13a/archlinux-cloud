@@ -50,15 +50,16 @@ The build process and E2E tests (using [QEMU](https://www.qemu.org/)) are run en
 
 - Bash
 - Docker
+- Docker Compose
 - GNU Make
 - KVM enabled Linux (optional but strongly recommended)
 
 ### Build and test the ISO image
 
-The following command generates the ISO image at `out/archlinux-cloud-YYYY.mm.dd-x86_64.iso` then run all E2E tests.
+The following command generates the ISO image at `dist/archlinux-cloud-YYYY.mm.dd-x86_64.iso` then run all E2E tests.
 
 ```sh
-$ make all test
+$ make
 ```
 
 To delete all generated files, run the following command.

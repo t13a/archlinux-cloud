@@ -1,0 +1,30 @@
+version: '3'
+services:
+  build:
+    build: ./build
+    environment:
+      BUILD_DIR: /mnt/build
+      ISO_LABEL: ${ISO_LABEL}
+      ISO_NAME: ${ISO_NAME}
+      ISO_VERSION: ${ISO_VERSION}
+    env_file: .env
+    privileged: true
+    volumes:
+    - ./build:/mnt/build:rw
+    - out:/mnt/out:rw
+    working_dir: /mnt/build
+  test:
+    build: ./test
+    environment:
+      ISO_LABEL: ${ISO_LABEL}
+      ISO_NAME: ${ISO_NAME}
+      ISO_VERSION: ${ISO_VERSION}
+      TEST_DIR: /mnt/test
+    env_file: .env
+    privileged: true
+    volumes:
+    - ./test:/mnt/test:ro
+    - out:/mnt/out:rw
+    working_dir: /mnt/test
+volumes:
+  out:

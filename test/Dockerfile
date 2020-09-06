@@ -14,7 +14,7 @@ RUN pacman -Syu --noconfirm \
         sudo \
     && pacman -Scc --noconfirm
 
-COPY entrypoint.sh /
+RUN useradd -m -s /bin/bash -U test \
+    && echo "test ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/test
 
-ENTRYPOINT ["/entrypoint.sh"]
-
+USER test

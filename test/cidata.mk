@@ -1,11 +1,8 @@
-CIDATA_TEMPLATES := $(shell find $(CIDATA_TEMPLATE_DIR) -type f -executable)
+CIDATA_TEMPLATES := $(shell find $(TEST_DIR)/cidata -type f -executable)
 
 OUT_CIDATA_DIR := $(OUT_DIR)/cidata
 OUT_CIDATA_FILES := $(foreach _,$(CIDATA_TEMPLATES),$(OUT_CIDATA_DIR)/$(notdir $_))
-
 export OUT_CIDATA_ISO := $(OUT_CIDATA_DIR)/cidata.iso
-
-CLEAN_FILES += $(OUT_CIDATA_DIR)
 
 .PHONY: cidata
 cidata: $(OUT_CIDATA_ISO)

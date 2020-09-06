@@ -7,7 +7,7 @@ RUN pacman -Syu --noconfirm \
         git \
     && pacman -Scc --noconfirm
 
-COPY entrypoint.sh /
+RUN useradd -m -s /bin/bash -U build \
+    && echo "build ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/build
 
-ENTRYPOINT ["/entrypoint.sh"]
-
+USER build

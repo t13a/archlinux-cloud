@@ -1,8 +1,7 @@
-REPO_PKGS := $(shell cat $(REPO_PKGS_FILE))
+export REPO_NAME := custom
+REPO_PKGS := $(shell cat $(BUILD_DIR)/repo/packages)
 
 export OUT_REPO_DIR := $(OUT_DIR)/repo
-
-CLEAN_FILES += $(OUT_REPO_DIR)
 
 .PHONY: repo
 repo: $(OUT_REPO_DIR)/.done
@@ -32,4 +31,3 @@ $$(OUT_REPO_DIR)/$(1)/.done:
 
 endef
 $(eval $(foreach _,$(REPO_PKGS),$(call REPO_OUT_PKG_DONE_RULE,$(_))))
-
